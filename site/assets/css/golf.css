@@ -1,0 +1,118 @@
+/* ════════════════════════════════════════════════════════════════════════
+   golf.css — Contact · FIG. 04 The long game.
+
+   The contact section is a long scroll with a sticky stage, in the theatre's
+   language: the plate (L-corners, annotations) and the copy. On a phone the
+   plate sits above the copy; from 640 px wide and landscape, the copy takes
+   five columns and the plate seven. assets/js/golf.js turns the scroll into
+   the plate's moment.
+   ════════════════════════════════════════════════════════════════════════ */
+
+.golf {
+  height: 330svh;
+}
+/* The grid follows the stage, so it never scrolls out from under the plate. */
+.golf::before {
+  display: none;
+}
+.golf__stage {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: hidden;
+}
+.golf__stage::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0 max(var(--rail), (100% - var(--sheet)) / 2);
+  background-image: var(--grid-cross), var(--grid-tile);
+  -webkit-mask-image: radial-gradient(ellipse 85% 75% at 62% 55%, #000 30%, transparent 92%);
+  mask-image: radial-gradient(ellipse 85% 75% at 62% 55%, #000 30%, transparent 92%);
+}
+.golf__wrap {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding-top: calc(var(--header) + var(--safe-top) + 14px);
+  padding-bottom: calc(18px + var(--safe-bottom));
+}
+.golf__plate {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  border: 1px solid var(--line);
+  background: var(--bg);
+}
+.golf__text {
+  flex: none;
+}
+
+/* Phones: the plate first and large; the copy compact beneath it. */
+@media (max-width: 639px) {
+  .golf__plate { order: -1; }
+  .golf__text .t-h2 { margin-top: 10px; }
+  .golf__text .t-lead { margin-top: 8px; font-size: 15px; line-height: 22px; }
+  .golf__text .contact__mail { margin-top: 14px; font-size: 18px; line-height: 26px; }
+  .golf__text .contact__links { margin-top: 10px; }
+}
+@media (max-width: 639px) and (max-height: 760px) {
+  .golf__text .t-lead { display: none; }
+  .golf__text .t-h2 { font-size: 24px; line-height: 30px; }
+}
+@media (max-width: 639px) and (max-height: 620px) {
+  .golf__text .eyebrow { display: none; }
+  .golf__text .t-h2 { margin-top: 0; }
+  .golf__wrap { gap: 10px; padding-top: calc(var(--header) + var(--safe-top) + 10px); }
+}
+
+/* Portrait tablets and open foldables: the plate keeps most of the height. */
+@media (min-width: 640px) and (max-aspect-ratio: 6/5) {
+  .golf__plate { flex: 1 1 auto; order: -1; }
+  .golf__text .contact__mail { margin-top: 20px; }
+  .golf__text .t-h2 { margin-top: 12px; }
+}
+
+/* Side by side whenever the screen is wide enough and not portrait. */
+@media (min-width: 640px) and (min-aspect-ratio: 6/5) {
+  .golf__wrap {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    grid-template-rows: minmax(0, 1fr);
+    column-gap: var(--gutter);
+    padding-top: calc(var(--header) + var(--safe-top) + 32px);
+    padding-bottom: calc(32px + var(--safe-bottom));
+  }
+  .golf__text {
+    grid-column: 1 / span 5;
+    grid-row: 1;
+    align-self: center;
+    padding-right: 8px;
+  }
+  .golf__plate {
+    grid-column: 6 / span 7;
+    grid-row: 1;
+    align-self: center;
+    height: 100%;
+    max-height: 860px;
+  }
+}
+@media (min-width: 640px) and (min-aspect-ratio: 6/5) and (max-width: 1023px) {
+  .golf__wrap { padding-top: calc(var(--header) + var(--safe-top) + 20px); padding-bottom: calc(20px + var(--safe-bottom)); }
+  .golf__text .contact__mail { font-size: 22px; line-height: 30px; }
+}
+@media (min-width: 640px) and (min-aspect-ratio: 6/5) and (max-height: 520px) {
+  .golf__text .t-lead,
+  .golf__text .eyebrow { display: none; }
+  .golf__text .t-h2 { margin-top: 0; font-size: 28px; line-height: 36px; }
+  .golf__text .contact__mail { margin-top: 16px; }
+}
+
+/* Without the script: the copy alone. */
+html:not(.js) .golf { height: auto; }
+html:not(.js) .golf::before { display: block; }
+html:not(.js) .golf__stage { position: static; height: auto; overflow: visible; }
+html:not(.js) .golf__stage::before { display: none; }
+html:not(.js) .golf__wrap { display: block; height: auto; padding-block: var(--section); }
+html:not(.js) .golf__plate { display: none; }

@@ -1,0 +1,242 @@
+/* ════════════════════════════════════════════════════════════════════════
+   R.2 · The second half (assets/js/chess.js, assets/js/ascii/chess-scene.js).
+
+   The section head, then a tall track with the site's sticky stage (.stage,
+   site.css): the plate and the beats side by side when the screen is wide,
+   stacked on a phone. The close and the sources follow the track.
+   ════════════════════════════════════════════════════════════════════════ */
+
+.chess {
+  border-top: 1px solid var(--line);
+}
+
+.chs-head {
+  padding-top: var(--section);
+}
+.chs-head .head {
+  margin-bottom: 0;
+}
+
+/* The track: the stage rides it for the story's length. */
+.js .chs-track {
+  height: 440svh;
+}
+.chs-stage {
+  /* The stage carries its own sheet (site.css .stage::before); its paper
+     hides the section's sheet so the grid never doubles or slides. */
+  background: var(--bg);
+}
+
+/* ── The beats ───────────────────────────────────────────────────────── */
+
+.chs-line {
+  max-width: 19ch;
+  color: var(--ink-1);
+  font-size: 21px;
+  line-height: 28px;
+  font-weight: 470;
+  letter-spacing: -0.012em;
+  text-wrap: balance;
+}
+.chs-beats .chapter__index {
+  margin-bottom: 10px;
+}
+
+/* ── Readouts: three cells between hairlines ─────────────────────────── */
+
+.chs-read {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 0.9fr) minmax(0, 1.3fr);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+.chs-read > div {
+  min-width: 0;
+  padding: 10px 10px 12px 0;
+}
+.chs-read > div + div {
+  border-left: 1px solid var(--line);
+  padding-left: 10px;
+}
+.chs-k {
+  color: var(--ink-3);
+  white-space: nowrap;
+}
+.chs-v {
+  margin-top: 6px;
+  font: 400 19px/24px var(--mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+  color: var(--ink-1);
+  white-space: nowrap;
+}
+.chs-of {
+  font-size: 0.62em;
+  letter-spacing: 0;
+  color: var(--ink-3);
+}
+.chs-s {
+  margin-top: 3px;
+  color: var(--ink-3);
+}
+
+/* The third cell: each beat's figure in one grid cell, so nothing jumps. */
+.chs-figs {
+  display: grid;
+  min-width: 0;
+}
+.chs-figure {
+  grid-area: 1 / 1;
+  min-width: 0;
+  opacity: 0;
+  transform: translate3d(0, 6px, 0);
+  /* Leaving first, then arriving: two figures never overlap. */
+  transition: opacity 0.16s var(--ease), transform 0.16s var(--ease);
+}
+.chs-figure[data-active] {
+  opacity: 1;
+  transform: none;
+  transition: opacity 0.3s var(--ease) 0.18s, transform 0.45s var(--ease-out) 0.18s;
+}
+
+/* ── The ruler ───────────────────────────────────────────────────────── */
+
+.chs-ruler {
+  padding-top: 4px;
+}
+.chs-track-line {
+  position: relative;
+  height: 1px;
+  background: var(--line-strong);
+}
+.chs-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 1px;
+  width: calc(var(--x, 0) * 100%);
+  background: var(--ink-1);
+}
+.chs-marker {
+  position: absolute;
+  top: -4px;
+  left: calc(var(--x, 0) * 100%);
+  width: 1px;
+  height: 9px;
+  background: var(--ink-1);
+}
+.chs-ticks {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  font: 400 10px/14px var(--mono);
+  letter-spacing: 0.02em;
+  color: var(--ink-3);
+}
+.chs-ticks span {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  transition: color 0.3s var(--ease);
+}
+.chs-ticks span:last-child {
+  text-align: right;
+}
+.chs-ticks b {
+  font-weight: 400;
+}
+.chs-ticks span[data-on] {
+  color: var(--ink-1);
+}
+
+/* ── After the track ─────────────────────────────────────────────────── */
+
+.chs-foot {
+  padding-top: clamp(40px, 6vw, 72px);
+  padding-bottom: var(--section);
+}
+.chs-close {
+  max-width: 44ch;
+  color: var(--ink-2);
+  font-size: 18px;
+  line-height: 26px;
+}
+.chs-close .arrow {
+  white-space: nowrap;
+}
+.chs-sources {
+  margin-top: clamp(40px, 6vw, 72px);
+}
+
+/* Copy never sits on the grid (the site's paper knock-out). */
+:where(.chs-read, .chs-ruler, .chs-close, .chs-story) {
+  position: relative;
+}
+:where(.chs-read, .chs-ruler, .chs-close)::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: -8px -12px;
+  background: var(--bg);
+  box-shadow: 0 0 36px 22px var(--bg);
+  border-radius: 28px;
+  pointer-events: none;
+}
+
+/* ── Sizes ───────────────────────────────────────────────────────────── */
+
+@media (min-width: 640px) {
+  .chs-line { font-size: 26px; line-height: 34px; }
+  .chs-v { font-size: 22px; line-height: 28px; }
+  .chs-read > div { padding: 12px 12px 14px 0; }
+  .chs-read > div + div { padding-left: 14px; }
+  .chs-close { font-size: 20px; line-height: 28px; }
+}
+@media (min-width: 640px) and (min-aspect-ratio: 6/5) {
+  .chs-story { gap: 32px; }
+}
+@media (min-width: 1024px) and (min-aspect-ratio: 6/5) {
+  .chs-line { font-size: 34px; line-height: 44px; letter-spacing: -0.018em; }
+  .chs-story { gap: 40px; }
+}
+@media (min-width: 1440px) and (min-aspect-ratio: 6/5) {
+  .chs-line { font-size: 38px; line-height: 48px; }
+}
+
+/* Short phones: the plate keeps its share; the readouts drop their notes. */
+@media (max-height: 700px) and (max-width: 639px) {
+  .chs-line { font-size: 18px; line-height: 24px; }
+  .chs-s { display: none; }
+  .chs-beats .chapter__index { margin-bottom: 6px; }
+}
+@media (max-width: 359px) {
+  .chs-read { grid-template-columns: minmax(0, 0.8fr) minmax(0, 0.9fr) minmax(0, 1.3fr); }
+  .chs-v { font-size: 16px; }
+  .chs-k { font-size: 9px; }
+}
+
+/* ── Without script: the beats in order, no stage ────────────────────── */
+
+html:not(.js) .chs-stage {
+  position: static;
+  height: auto;
+  overflow: visible;
+}
+html:not(.js) .chs-stage .plate {
+  display: none;
+}
+html:not(.js) .chs-beats {
+  display: grid;
+  gap: 24px;
+}
+html:not(.js) .chs-beats > li,
+html:not(.js) .chs-figure {
+  grid-area: auto;
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chs-figure,
+  .chs-ticks span { transition: none; }
+}

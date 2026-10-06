@@ -1,0 +1,166 @@
+/* ════════════════════════════════════════════════════════════════════════
+   R · Readings (assets/js/decade.js).
+
+   R.1 three live readings in a cornered band, then the sources.
+   Tokens and type are the site's (site.css); fallbacks keep the section
+   legible on its own.
+   ════════════════════════════════════════════════════════════════════════ */
+
+/* Paper knock-out, the site's own (site.css): copy never sits on the grid or
+   a registration cross. The readings band carries its own paper. */
+:where(.dc-sources) { position: relative; }
+:where(.dc-sources)::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: -8px -12px;
+  background: var(--bg, #fff);
+  box-shadow: 0 0 36px 22px var(--bg, #fff);
+  border-radius: 28px;
+  pointer-events: none;
+}
+
+.dc-bar {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0;
+  color: var(--ink-3, #737373);
+}
+
+/* Footnote marks: small, mono, never louder than the sentence. */
+.dc-fn {
+  position: relative;
+  top: -0.5em;
+  margin-left: 2px;
+  font: 400 10px/0 var(--mono, monospace);
+  letter-spacing: 0;
+  vertical-align: baseline;
+}
+.dc-fn a {
+  padding: 2px;
+  color: var(--ink-3, #737373);
+  text-decoration: none;
+}
+.dc-fn a:hover { color: var(--ink-1, #0a0a0a); }
+
+/* ── R.1 · Since this page opened ──────────────────────────────────────── */
+
+.dc-live {
+  position: relative;
+  border: 1px solid var(--line, #e5e5e5);
+  background: var(--bg, #fff);
+}
+.dc-live > .dc-bar {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--line, #e5e5e5);
+}
+.dc-live__grid {
+  display: grid;
+  margin: 0;
+}
+.dc-reading {
+  container-type: inline-size;
+  display: grid;
+  align-content: start;
+  padding: 16px 16px 20px;
+}
+.dc-reading + .dc-reading { border-top: 1px solid var(--line, #e5e5e5); }
+.dc-reading dt { color: var(--ink-3, #737373); }
+.dc-reading dd { margin: 0; }
+.dc-v {
+  margin-top: 10px !important;
+  font: 400 34px/1.1 var(--mono, monospace);
+  font-size: clamp(26px, 14cqi, 48px);
+  letter-spacing: -0.035em;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-1, #0a0a0a);
+  white-space: nowrap;
+}
+.dc-unit {
+  margin-left: 0.25em;
+  font-size: 0.5em;
+  letter-spacing: 0;
+  color: var(--ink-3, #737373);
+}
+.dc-label {
+  margin-top: 10px !important;
+  font-size: 15px;
+  line-height: 22px;
+  color: var(--ink-1, #0a0a0a);
+}
+.dc-basis {
+  margin-top: 2px !important;
+  color: var(--ink-3, #737373);
+}
+.dc-note {
+  margin: 0;
+  padding: 12px 16px;
+  border-top: 1px solid var(--line, #e5e5e5);
+  color: var(--ink-3, #737373);
+}
+
+@media (min-width: 768px) {
+  .dc-live__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .dc-reading { padding: 24px 24px 28px; }
+  .dc-v { margin-top: 16px !important; }
+  .dc-reading + .dc-reading { border-top: 0; border-left: 1px solid var(--line, #e5e5e5); }
+  .dc-live > .dc-bar, .dc-note { padding-inline: 24px; }
+}
+
+
+/* Sources: a quiet disclosure, closed by default; a footnote opens it. */
+.dc-sources {
+  display: block;
+  margin-top: clamp(48px, 7vw, 96px);
+  border-top: 1px solid var(--line, #e5e5e5);
+  color: var(--ink-3, #737373);
+}
+.dc-sources > summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 44px;
+  padding-block: 12px;
+  cursor: pointer;
+  list-style: none;
+  color: var(--ink-2, #404040);
+}
+.dc-sources > summary::-webkit-details-marker { display: none; }
+.dc-sources > summary::after { content: "+"; font-family: var(--mono, "DM Mono", monospace); color: var(--ink-3, #737373); }
+.dc-sources[open] > summary::after { content: "−"; }
+.dc-sources > summary:hover { color: var(--ink-1, #0a0a0a); }
+.dc-sources > summary:focus-visible { outline: 2px solid var(--ink-1, #0a0a0a); outline-offset: 2px; }
+.dc-sources p { margin: 16px 0 8px; max-width: 96ch; }
+.dc-sources ol {
+  display: grid;
+  gap: 10px;
+  max-width: 96ch;
+  margin: 4px 0 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: dc-src;
+}
+.dc-sources li {
+  counter-increment: dc-src;
+  position: relative;
+  padding-left: 3ch;
+  scroll-margin-top: calc(var(--header, 56px) + var(--safe-top, 0px) + 24px);
+}
+.dc-sources li::before { content: counter(dc-src); position: absolute; left: 0; color: var(--ink-1, #0a0a0a); }
+.dc-title { color: var(--ink-1, #0a0a0a); } /* titles, as italics would be in print */
+.dc-sources li:target { color: var(--ink-1, #0a0a0a); }
+.dc-sources a {
+  color: var(--ink-1, #0a0a0a);
+  text-decoration: underline;
+  text-decoration-color: var(--line-strong, #d4d4d4);
+  text-underline-offset: 3px;
+  overflow-wrap: anywhere;
+}
+.dc-sources a:hover { text-decoration-color: currentColor; }
+
+/* Without script there is no "since": each reading shows its rate. */
+.js .dc-ps { display: none; }
+html:not(.js) .dc-n,
+html:not(.js) [data-dc-clock] { display: none; }

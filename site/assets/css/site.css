@@ -55,6 +55,11 @@
   --safe-x: max(env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px));
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
+  /* Sticky stages fill the large viewport (toolbars retracted) so no band
+     opens at the screen's edge on scroll; their content stays within the
+     small viewport, clear of the toolbars and the home indicator. */
+  --toolbar: 0px;
+  --stage-foot: max(var(--safe-bottom), var(--toolbar));
   --rail: max(10px, var(--safe-x));
   --inset: 14px;
   --sheet: 1360px;
@@ -70,6 +75,10 @@
      (every 160 px). Light and dark variants; data URIs cannot read tokens. */
   --grid-tile: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Cg fill='none' shape-rendering='crispEdges'%3E%3Cpath d='M8.5 0V40M16.5 0V40M24.5 0V40M32.5 0V40M0 8.5H40M0 16.5H40M0 24.5H40M0 32.5H40' stroke='%230a0a0a' stroke-opacity='.042'/%3E%3Cpath d='M.5 0V40M0 .5H40' stroke='%230a0a0a' stroke-opacity='.08'/%3E%3C/g%3E%3C/svg%3E");
   --grid-cross: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cpath d='M.5 0V4.5M.5 156V160M0 .5H4.5M156 .5H160' stroke='%230a0a0a' stroke-opacity='.24' fill='none' shape-rendering='crispEdges'/%3E%3C/svg%3E");
+}
+
+@supports (height: 100lvh) {
+  :root { --toolbar: calc(100lvh - 100svh); }
 }
 
 @media (min-width: 640px) {
@@ -553,7 +562,8 @@ button {
 .stage {
   position: sticky;
   top: 0;
-  height: 100svh;
+  height: 100vh;
+  height: 100lvh;
   overflow: hidden;
 }
 /* The stage's own sheet: the grid follows the stage, so it never scrolls out
@@ -573,7 +583,7 @@ button {
   flex-direction: column;
   gap: 16px;
   padding-top: calc(var(--header) + var(--safe-top) + 16px);
-  padding-bottom: calc(16px + var(--safe-bottom));
+  padding-bottom: calc(16px + var(--stage-foot));
 }
 
 /* The plate: a drawing sheet with L-corners and annotations. */
@@ -765,7 +775,7 @@ button {
     grid-template-rows: minmax(0, 1fr);
     column-gap: var(--gutter);
     padding-top: calc(var(--header) + var(--safe-top) + 32px);
-    padding-bottom: calc(32px + var(--safe-bottom));
+    padding-bottom: calc(32px + var(--stage-foot));
   }
   .story {
     grid-column: 1 / span 5;
@@ -786,7 +796,7 @@ button {
   .story__foot {
     position: absolute;
     left: var(--inset);
-    bottom: calc(32px + var(--safe-bottom));
+    bottom: calc(32px + var(--stage-foot));
     width: calc((100% - 2 * var(--inset)) * 5 / 12);
   }
   .story { position: static; }
@@ -795,8 +805,8 @@ button {
 @media (min-width: 640px) and (min-aspect-ratio: 6/5) and (max-width: 1023px) {
   .t-hero { font-size: 32px; }
   .chapter__lead { font-size: 15px; line-height: 22px; }
-  .stage .wrap { padding-top: calc(var(--header) + var(--safe-top) + 20px); padding-bottom: calc(20px + var(--safe-bottom)); }
-  .story__foot { bottom: calc(20px + var(--safe-bottom)); }
+  .stage .wrap { padding-top: calc(var(--header) + var(--safe-top) + 20px); padding-bottom: calc(20px + var(--stage-foot)); }
+  .story__foot { bottom: calc(20px + var(--stage-foot)); }
 }
 @media (min-width: 640px) and (min-aspect-ratio: 6/5) and (max-height: 520px) {
   .t-hero { font-size: 26px; }

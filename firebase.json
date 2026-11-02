@@ -3,6 +3,10 @@
     "site": "reality-reach",
     "public": "site",
     "cleanUrls": true,
+    "rewrites": [
+      { "source": "/proposals", "function": { "functionId": "proposals", "region": "asia-south1" } },
+      { "source": "/proposals/**", "function": { "functionId": "proposals", "region": "asia-south1" } }
+    ],
     "ignore": ["**/.*"],
     "headers": [
       {
